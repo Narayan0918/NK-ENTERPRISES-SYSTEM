@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Package, FileText, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Users, Package, FileText, Menu, X, BarChart2 } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import Parties from './components/Parties';
 import Products from './components/Products';
 import Invoices from './components/Invoices';
 
-// Helper component for Sidebar Links
+// Note: Ensure you have a Reports component created in your components folder!
+import Reports from './components/Reports'; 
+
 const NavLink = ({ to, icon: Icon, children, onClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
@@ -38,7 +40,7 @@ function App() {
     <Router>
       <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">
         
-        {/* MOBILE TOP BAR (Visible only on small screens) */}
+        {/* MOBILE TOP BAR */}
         <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 z-50 flex items-center justify-between px-4">
           <div className="font-bold text-xl text-blue-900 tracking-tight">N.K. ENTERPRISES</div>
           <button onClick={toggleMobileMenu} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
@@ -46,7 +48,7 @@ function App() {
           </button>
         </div>
 
-        {/* OVERLAY FOR MOBILE (Dims background when sidebar is open) */}
+        {/* OVERLAY FOR MOBILE */}
         {isMobileMenuOpen && (
           <div 
             className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
@@ -54,7 +56,7 @@ function App() {
           ></div>
         )}
 
-        {/* SIDEBAR (Responsive behavior) */}
+        {/* SIDEBAR */}
         <aside 
           className={`
             fixed md:static inset-y-0 left-0 z-40
@@ -64,18 +66,17 @@ function App() {
             flex flex-col
           `}
         >
-          {/* Logo Area */}
           <div className="h-16 md:h-20 flex flex-col justify-center px-6 border-b border-gray-100 bg-white">
             <h1 className="text-xl font-bold text-blue-900 tracking-tight">N.K. ENTERPRISES</h1>
             <p className="text-xs text-gray-500 font-medium">Textile ERP System</p>
           </div>
 
-          {/* Navigation Links */}
           <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             <NavLink to="/" icon={LayoutDashboard} onClick={() => setIsMobileMenuOpen(false)}>Dashboard</NavLink>
             <NavLink to="/parties" icon={Users} onClick={() => setIsMobileMenuOpen(false)}>Parties</NavLink>
             <NavLink to="/products" icon={Package} onClick={() => setIsMobileMenuOpen(false)}>Products</NavLink>
             <NavLink to="/invoices" icon={FileText} onClick={() => setIsMobileMenuOpen(false)}>Invoices</NavLink>
+            <NavLink to="/reports" icon={BarChart2} onClick={() => setIsMobileMenuOpen(false)}>Reports</NavLink>
           </nav>
         </aside>
 
@@ -88,6 +89,7 @@ function App() {
                 <Route path="/parties" element={<Parties />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/invoices" element={<Invoices />} />
+                <Route path="/reports" element={<Reports />} />
               </Routes>
             </div>
           </div>
