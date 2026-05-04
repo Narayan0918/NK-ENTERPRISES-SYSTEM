@@ -1,41 +1,52 @@
-import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Package, FileText, Menu, X, BarChart2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
+import { LayoutDashboard, Users, Package, FileText, Menu, X, BarChart2, LogOut } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import Parties from './components/Parties';
 import Products from './components/Products';
 import Invoices from './components/Invoices';
+import Reports from './components/Reports';
+import Login from './components/Login'; // Import Login!
 
-// Note: Ensure you have a Reports component created in your components folder!
-import Reports from './components/Reports'; 
-
+// Sidebar Link Helper
 const NavLink = ({ to, icon: Icon, children, onClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
-  
   return (
-    <Link
-      to={to}
-      onClick={onClick}
-      className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
-        isActive 
-          ? 'bg-blue-50 text-blue-700' 
-          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-      }`}
-    >
-      <Icon size={20} className={isActive ? 'text-blue-600' : 'text-gray-400'} />
-      {children}
+    <Link to={to} onClick={onClick} className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}>
+      <Icon size={20} className={isActive ? 'text-blue-600' : 'text-gray-400'} /> {children}
     </Link>
   );
 };
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // Check if token exists on load
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('access_token'));
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    setIsAuthenticated(false);
+    setIsMobileMenuOpen(false);
   };
 
+  // If NOT logged in, ONLY show the Login page
+  if (!isAuthenticated) {
+    return (
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </Router>
+    );
+  }
+
+  // If LOGGED IN, show the full ERP interface
   return (
     <Router>
       <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">
@@ -48,24 +59,10 @@ function App() {
           </button>
         </div>
 
-        {/* OVERLAY FOR MOBILE */}
-        {isMobileMenuOpen && (
-          <div 
-            className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-            onClick={toggleMobileMenu}
-          ></div>
-        )}
+        {isMobileMenuOpen && <div className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30" onClick={toggleMobileMenu}></div>}
 
         {/* SIDEBAR */}
-        <aside 
-          className={`
-            fixed md:static inset-y-0 left-0 z-40
-            w-64 bg-white border-r border-gray-200 
-            transform transition-transform duration-300 ease-in-out
-            ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-            flex flex-col
-          `}
-        >
+        <aside className={`fixed md:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} flex flex-col`}>
           <div className="h-16 md:h-20 flex flex-col justify-center px-6 border-b border-gray-100 bg-white">
             <h1 className="text-xl font-bold text-blue-900 tracking-tight">N.K. ENTERPRISES</h1>
             <p className="text-xs text-gray-500 font-medium">Textile ERP System</p>
@@ -78,6 +75,13 @@ function App() {
             <NavLink to="/invoices" icon={FileText} onClick={() => setIsMobileMenuOpen(false)}>Invoices</NavLink>
             <NavLink to="/reports" icon={BarChart2} onClick={() => setIsMobileMenuOpen(false)}>Reports</NavLink>
           </nav>
+
+          {/* LOGOUT BUTTON */}
+          <div className="p-4 border-t border-gray-100">
+            <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-red-600 hover:bg-red-50 transition-colors">
+              <LogOut size={20} /> Logout
+            </button>
+          </div>
         </aside>
 
         {/* MAIN CONTENT AREA */}
@@ -90,11 +94,11 @@ function App() {
                 <Route path="/products" element={<Products />} />
                 <Route path="/invoices" element={<Invoices />} />
                 <Route path="/reports" element={<Reports />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </div>
           </div>
         </main>
-
       </div>
     </Router>
   );
