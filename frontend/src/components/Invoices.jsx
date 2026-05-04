@@ -234,8 +234,7 @@ const Invoices = () => {
           <div className="flex items-center gap-2 mb-3 text-gray-700 font-semibold border-b pb-2">
             <Filter size={18} /> <span>Filter Invoices</span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
-            <div className="col-span-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">            <div className="col-span-1">
               <input type="text" placeholder="Search Bill No..." value={filters.billNo} onChange={e => setFilters({...filters, billNo: e.target.value})} className="w-full p-2 text-sm border border-gray-300 rounded-md" />
             </div>
             <div className="col-span-1">
