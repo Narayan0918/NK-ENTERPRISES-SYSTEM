@@ -48,8 +48,7 @@ const Dashboard = () => {
       <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Business Overview</h2>
 
       {/* STATS CARDS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        <div className="bg-white p-5 md:p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">        <div className="bg-white p-5 md:p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4">
           <div className="bg-green-100 p-3 md:p-4 rounded-lg shrink-0">
             <IndianRupee className="text-green-600" size={28} />
           </div>
