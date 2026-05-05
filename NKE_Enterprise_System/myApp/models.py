@@ -67,7 +67,7 @@ class InvoiceItem(models.Model):
     p_no = models.CharField(max_length=50, blank=True, null=True) 
     
     # Maps directly to 'WIGHT' column in your sheet. Weight of the yarn.
-    quantity = models.DecimalField(max_digits=10, decimal_places=2) 
+    quantity = models.DecimalField(max_digits=10, decimal_places=3) 
     
     # Essential unlisted field to calculate Amount (Qty * Rate)
     rate = models.DecimalField(max_digits=10, decimal_places=2) 

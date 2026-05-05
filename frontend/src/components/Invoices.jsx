@@ -148,7 +148,7 @@ const Invoices = () => {
     newItems[index][field] = value;
 
     if (field === 'quantity' || field === 'rate') {
-      const qty = parseFloat(newItems[index].quantity || 0);
+      const qty = parseFloat(newItems[index].quantity || 0).toFixed(3);
       const rate = parseFloat(newItems[index].rate || 0);
       newItems[index].amount = (qty * rate).toFixed(2);
     }
@@ -294,7 +294,7 @@ const Invoices = () => {
                   <option value="">Select Product...</option>
                   {products.map(p => <option key={p.id} value={p.id}>{p.name} (HSN: {p.hsn_code})</option>)}
                 </select>
-                <input required type="number" step="0.01" placeholder="Qty" value={item.quantity} onChange={e => handleItemChange(index, 'quantity', e.target.value)} className="w-24 p-2 border border-gray-300 rounded-md" />
+                <input required type="number" step="0.001" placeholder="Weight" value={item.quantity} onChange={e => handleItemChange(index, 'quantity', e.target.value)} className="w-24 p-2 border border-gray-300 rounded-md" />
                 <input required type="number" step="0.01" placeholder="Rate" value={item.rate} onChange={e => handleItemChange(index, 'rate', e.target.value)} className="w-32 p-2 border border-gray-300 rounded-md" />
                 <div className="w-32 p-2 bg-gray-100 rounded-md text-right font-medium text-gray-600">₹{item.amount || 0}</div>
                 <button type="button" onClick={() => removeItemRow(index)} className="text-red-500 hover:text-red-700 p-2"><Trash2 size={20} /></button>
@@ -352,7 +352,7 @@ const Invoices = () => {
                     <td className="p-3 text-gray-500">{inv.party_details?.gst_number}</td>
                     <td className="p-3 font-medium uppercase">{inv.party_details?.business_name}</td>
                     <td className="p-3">{firstItem.product_details?.hsn_code || '-'}</td>
-                    <td className="p-3 text-center">{firstItem.quantity || '0.00'}</td>
+                    <td className="p-3 text-center">{firstItem.quantity || '0.000'}</td>
                     <td className="p-3 text-right">₹{inv.total_taxable_amount}</td>
                     <td className="p-3 text-right text-red-600">{inv.cgst_amount > 0 ? `₹${inv.cgst_amount}` : '-'}</td>
                     <td className="p-3 text-right text-red-600">{inv.sgst_amount > 0 ? `₹${inv.sgst_amount}` : '-'}</td>
