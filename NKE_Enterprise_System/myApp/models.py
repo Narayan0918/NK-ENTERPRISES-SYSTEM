@@ -22,10 +22,11 @@ class Product(models.Model):
     Normalizes 'HSN CODE' and 'DESCRIPTION' details.
     """
     name = models.CharField(max_length=255) # e.g., 'Woollen Yarn', 'Nettle Yarn'
-    hsn_code = models.CharField(max_length=10, unique=True, db_index=True)
+    hsn_code = models.CharField(max_length=10, db_index=True)
     
     def __str__(self):
         return f"{self.name} (HSN: {self.hsn_code})"
+
 
 class Invoice(models.Model):
     """
